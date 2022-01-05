@@ -1,5 +1,5 @@
 import React from 'react'
-import {SafeAreaView,View, Text} from 'react-native'
+import {SafeAreaView, View, Text} from 'react-native'
 import HeaderTabs from '../components/HeaderTabs'
 
 export default function Home(){
