@@ -1,51 +1,91 @@
-import React, { useEffect, useState } from 'react'
-import {SafeAreaView, View, Text} from 'react-native'
-import Categories from '../components/Categories'
-import HeaderTabs from '../components/HeaderTabs'
-import SeachBar from '../components/SeachBar'
+import React, { useEffect, useState } from "react";
+import {
+  SafeAreaView,
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+} from "react-native";
+import Categories from "../components/Categories";
+import HeaderTabs from "../components/HeaderTabs";
+import SeachBar from "../components/SeachBar";
 import { ScrollView } from "react-native";
-import RestaurantItems, { localRestaurants } from '../components/RestaurantItems'
-import cors from 'cors'
+import RestaurantItems, {
+  localRestaurants,
+} from "../components/RestaurantItems";
+import cors from "cors";
 
+const YELP_API_KEY =
+  "f_WEcwtJpiMjWv8Wwffeh0_i4lwazbBnQ8SETIxqfd1nkddu7Mlca-qZkcS-TklT6QDyFq9GtcPoAq9VQLxaMGNgJzO82WUmF98ciI7JwzAF-FQgrz9N_Xt6JL3ZYXYx";
 
-const YELP_API_KEY="f_WEcwtJpiMjWv8Wwffeh0_i4lwazbBnQ8SETIxqfd1nkddu7Mlca-qZkcS-TklT6QDyFq9GtcPoAq9VQLxaMGNgJzO82WUmF98ciI7JwzAF-FQgrz9N_Xt6JL3ZYXYx"
+export default function Home() {
+  const [restaurantData, setrestaurantData] = useState(localRestaurants);
+  const [city, setcity] = useState("Los Angeles");
 
-export default function Home(){
-    const[restaurantData,setrestaurantData]=useState(localRestaurants)
-    const [city,setcity]=useState("San Francisco")
+  const getRestaurantsFromYelp = async () => {
+    const yelpUrl = `https://api.yelp.com/v3/businesses/search?term=restaurants&location=SanDiego${city}`;
 
-    const getRestaurantsFromYelp = () =>{
-        const yelpUrl= `https://api.yelp.com/v3/businesses/search?term=restaurants&location=SanDiego${city}`
+    const apiOptions = {
+      headers: {
+        mode: cors,
+        // 'Access-Control-Allow-Origin':'http://localhost:19006',
+        Authorization: `Bearer ${YELP_API_KEY}`,
+      },
+    };
 
-        const apiOptions = {
-            headers: {
-                mode: cors,
-            // 'Access-Control-Allow-Origin':'http://localhost:19006',
-              Authorization: `Bearer ${YELP_API_KEY}`,
-            },
-          };
-      
-          return fetch(yelpUrl, apiOptions)
-            .then((res) => res.json())
-            .then((json) =>setrestaurantData(json.businesses)
-            )
-        };
-    
-        useEffect(()=>{
-            getRestaurantsFromYelp();
-        },[city])
+    const res = await fetch(yelpUrl, apiOptions);
+      const json = await res.json();
+      return setrestaurantData(json.businesses);
+  };
 
-    return(
-        <SafeAreaView style={{backgroundColor: "#eee" , flex: 1}}>
-            <View style={{backgroundColor: "white" , padding: 15}}> 
-           <HeaderTabs />
-           <SeachBar cityHandler={setcity} />
-           </View>
-           <ScrollView showVerticalScrollIndicator={false}>
-           <Categories />
-           <RestaurantItems restaurantData={restaurantData} />
-           
-           </ScrollView>
-        </SafeAreaView>
-    )
+  useEffect(() => {
+    getRestaurantsFromYelp();
+  }, [city]);
+
+  return (
+    <SafeAreaView style={{ backgroundColor: "#eee", flex: 1 }}>
+      <View style={{ backgroundColor: "white", padding: 15 }}>
+        <HeaderTabs />
+
+        {/* CityState Testing Code instead of google Api ..need to be removed */}
+
+        <TextInput
+          style={styles.input}
+          onChangeText={setcity}
+          placeholder="Enter Restaurant Name"
+          value={city}
+          keyboardType="default"
+        />
+
+        {/* ===================================================================== */}
+
+        <SeachBar />
+      </View>
+      <ScrollView showVerticalScrollIndicator={false}>
+        <Categories />
+        <RestaurantItems restaurantData={restaurantData} />
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+// CitystateTestingCode Styling..need to be removed
+
+const styles = StyleSheet.create({
+  input: {
+    fontWeight: "700",
+    marginTop: 25,
+    height: 50,
+    padding: 10,
+    flexDirection: "row",
+    backgroundColor: "#eee",
+    borderRadius: 50,
+    alignItems: "center",
+    marginRight: 10,
+  },
+});
+
+{
+  /* =====================================================================*/
 }
