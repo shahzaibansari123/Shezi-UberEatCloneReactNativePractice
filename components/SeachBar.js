@@ -4,10 +4,10 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import Ionicons from "react-native-vector-icons/Ionicons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 
-export default function SeachBar() {
+export default function SeachBar({cityHandler}) {
   return (
     <View style={{ marginTop: 15, flexDirection: "row" }}>
-      {/* <GooglePlacesAutocomplete
+      <GooglePlacesAutocomplete
        
     //    latest
        query={{key:"AIzaSyD4DlvjV5oV2At4FmLi5lOy1-u2EXTDBE8"}}
@@ -16,6 +16,7 @@ export default function SeachBar() {
             city=data.description.split(",")[0]
             cityHandler(city)
         }}
+
 
     
 
@@ -59,7 +60,7 @@ export default function SeachBar() {
             <Text>Search</Text>
           </View>
         )}
-      /> */}
+      />
     </View>
   );
 }
