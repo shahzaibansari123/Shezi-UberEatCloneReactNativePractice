@@ -8,15 +8,19 @@ import {
   StyleSheet,
 } from "react-native";
 import {Divider} from 'react-native-elements'
-import Categories from "../components/Categories";
-import HeaderTabs from "../components/HeaderTabs";
-import SeachBar from "../components/SeachBar";
-import BottomTabs from "../components/BottomTabs";
+import Categories from "../components/home/Categories";
+import HeaderTabs from "../components/home/HeaderTabs";
+import SeachBar from "../components/home/SeachBar";
+import BottomTabs from "../components/home/BottomTabs";
 import { ScrollView } from "react-native";
 import RestaurantItems, {
   localRestaurants,
-} from "../components/RestaurantItems";
+} from "../components/home/RestaurantItems";
 import cors from "cors";
+
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+
+const barHeight = getStatusBarHeight();
 
 const YELP_API_KEY =
   "f_WEcwtJpiMjWv8Wwffeh0_i4lwazbBnQ8SETIxqfd1nkddu7Mlca-qZkcS-TklT6QDyFq9GtcPoAq9VQLxaMGNgJzO82WUmF98ciI7JwzAF-FQgrz9N_Xt6JL3ZYXYx";
@@ -50,7 +54,8 @@ export default function Home() {
   }, [city,activeTabs]);
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#eee", flex: 1 }}>
+   
+    <View style={{ backgroundColor: "#fff", flex: 1 , marginTop:barHeight}}>
       <View style={{ backgroundColor: "white", padding: 15 }}>
         <HeaderTabs activeTabs={activeTabs} setActiveTabs={setActiveTabs} />
 
@@ -75,7 +80,7 @@ export default function Home() {
       </ScrollView>
       <Divider  width={1}/>
       <BottomTabs />
-    </SafeAreaView>
+    </View>
   );
 }
 
