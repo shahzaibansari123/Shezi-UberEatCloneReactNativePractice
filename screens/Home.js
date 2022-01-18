@@ -25,7 +25,7 @@ const barHeight = getStatusBarHeight();
 const YELP_API_KEY =
   "f_WEcwtJpiMjWv8Wwffeh0_i4lwazbBnQ8SETIxqfd1nkddu7Mlca-qZkcS-TklT6QDyFq9GtcPoAq9VQLxaMGNgJzO82WUmF98ciI7JwzAF-FQgrz9N_Xt6JL3ZYXYx";
 
-export default function Home() {
+export default function Home({navigation}) {
   const [restaurantData, setrestaurantData] = useState(localRestaurants);
   const [city, setcity] = useState("San Francisco");
   const [activeTabs, setActiveTabs]=useState("Delivery")    
@@ -76,7 +76,7 @@ export default function Home() {
       <ScrollView showVerticalScrollIndicator={false}>
       
         <Categories />
-        <RestaurantItems restaurantData={restaurantData} />
+        <RestaurantItems restaurantData={restaurantData} navigation={navigation} />
       </ScrollView>
       <Divider  width={1}/>
       <BottomTabs />
