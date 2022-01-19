@@ -76,12 +76,12 @@ const styles = StyleSheet.create({
       },
 })
 
-export default function MenuItems() {
+export default function MenuItems({restaurantName}) {
     const dispatch= useDispatch()
-const selectItem=(item) => 
+const selectItem=(item, checkboxValue) => 
 dispatch({
     type: "ADD_TO_CART",
-    payload: item,
+    payload: {...item, restaurantName: restaurantName , checkboxValue: checkboxValue}
 })
     return (
         <>
@@ -90,7 +90,8 @@ dispatch({
         {foods.map((food, index)=>(
         <View key={index}>
         <View style={styles.menuItemStyle} >
-            <BouncyCheckbox iconStyle={{borderColor: 'lightGray', borderRadius: 0}} fillColor="green"/>
+            <BouncyCheckbox iconStyle={{borderColor: 'lightGray', borderRadius: 0}} fillColor="green"
+            onPress={(checkboxValue)=>selectItem(food, checkboxValue)}/>
             <FoodInfo food={food}/>
             <FoodImage food={food} />
         </View>
