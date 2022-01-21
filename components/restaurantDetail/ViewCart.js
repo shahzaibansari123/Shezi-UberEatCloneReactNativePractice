@@ -2,6 +2,9 @@ import React from "react";
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from "react-native";
 import { useSelector } from "react-redux";
 import { useState } from "react";
+import OrderItem from "./OrderItem";
+// import { color } from "react-native-elements/dist/helpers";
+// import firebase from '../../firebase'
 
 export default function ViewCart() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -18,77 +21,110 @@ export default function ViewCart() {
     currency: "USD",
   });
 
+  // const addOrderToFirebase = ()=>{
+  //   const db=firebase.firestore()
+  // }
   const styles = StyleSheet.create({
     modalContainer: {
-      justifyContent: "flex-end",  //thats why the modla showed at the bottom
+      justifyContent: "flex-end", //thats why the modla showed at the bottom
       flex: 1, //taking whole screen
       backgroundColor: "rgba(0, 0, 0,0.7)",
+      // marginTop: -30,
     },
-    modalCheckoutContainer:{
-      backgroundColor: "white", 
+    modalCheckoutContainer: {
+      backgroundColor: "white",
       padding: 16,
-      height: 500,
+      height: 600,
       borderWidth: 1,
-
     },
 
-    modalCheckoutButton:{
+    restaurantName: {
       textAlign: "center",
       fontSize: 18,
-      fontWeight: "600",
+      fontWeight: "bold",
       marginBottom: 10,
     },
-    subTotalContainer:{
+    subTotalContainer: {
       justifyContent: "space-between",
       flexDirection: "row",
       marginTop: 15,
     },
-    subTotalText:{
+    subTotalText: {
       textAlign: "left",
-      fontSize: 15,
+      fontSize: 16,
       fontWeight: "600",
       marginBottom: 10,
-    }
+    },
   });
 
   const checkoutModalContent = () => {
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: 30,
-
-          // margin: 20,
-          // backgroundColor: "white",
-          // borderRadius: 20,
-          // padding: 35,
-          // alignItems: "center",
-          // shadowColor: "#000",
-          // shadowOffset: {
-          //   width: 0,
-          //   height: 2
-          // },
-          // shadowOpacity: 0.25,
-          // shadowRadius: 4,
-          // elevation: 5
-        }}
-      >
-        <View
-          style={{
-            backgroundColor: "black",
-            padding: 10,
-            borderRadius: 30,
-            width: 150,
-            alignItems: "center",
-          }}
-        >
-          <TouchableOpacity onPress={() => setModalVisible(false)}>
-            <Text style={{ color: "white" }}>Checkout</Text>
-          </TouchableOpacity>
+      <>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalCheckoutContainer}>
+            <Text style={styles.restaurantName}>{restaurantName}</Text>
+            {items.map((item, index) => (
+              <OrderItem key={index} item={item} />
+            ))}
+            <View style={styles.subTotalContainer}>
+              <Text style={styles.subTotalText}>SubTotal</Text>
+              <Text>{totalUSD}</Text>
+            </View>
+            <View style={{ flexDirection: "row", justifyContent: "center" }}>
+              <TouchableOpacity onPress={() => setModalVisible(false)}
+                style={{
+                  marginTop: 20,
+                  backgroundColor: "black",
+                  alignItems: "center",
+                  padding: 13,
+                  width: 300,
+                  position: "relative",
+                  borderRadius: 30,
+                }}
+              >
+                <Text style={{ color: "white", fontSize: 20 }}>Checkout</Text>
+                <Text style={{position: "absolute", right: 20 , color: "white", fontSize: 20, top: 14 }}>${total ? totalUSD : "--"}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
-      </View>
+      </>
+      // <View
+      //   style={{
+      //     flex: 1,
+      //     justifyContent: "center",
+      //     alignItems: "center",
+      //     marginTop: 30,
+
+      // margin: 20,  ye extra tha practice
+      // backgroundColor: "white",
+      // borderRadius: 20,
+      // padding: 35,
+      // alignItems: "center",
+      // shadowColor: "#000",
+      // shadowOffset: {
+      //   width: 0,
+      //   height: 2
+      // },
+      // shadowOpacity: 0.25,
+      // shadowRadius: 4,
+      // elevation: 5
+      //   }}
+      // >
+      //   <View
+      //     style={{
+      //       backgroundColor: "black",
+      //       padding: 10,
+      //       borderRadius: 30,
+      //       width: 150,
+      //       alignItems: "center",
+      //     }}
+      //   >
+      //     <TouchableOpacity onPress={() => setModalVisible(false)}>
+      //       <Text style={{ color: "white" }}>Checkout</Text>
+      //     </TouchableOpacity>
+      //   </View>
+      // </View>
     );
   };
   // const amount=" "+totalUSD.tofixed(2)

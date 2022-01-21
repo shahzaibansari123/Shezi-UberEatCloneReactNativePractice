@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Text } from 'react-native'
 import {createStackNavigator} from '@react-navigation/stack'
+// import {createNativeStackNavigator} from '@react-navigation/native-stack'
 import { NavigationContainer } from '@react-navigation/native';
 import Home from './screens/Home';
 import RestaurantDetail from './screens/RestaurantDetail';
