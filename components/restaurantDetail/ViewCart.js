@@ -4,10 +4,12 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import OrderItem from "./OrderItem";
 // import { color } from "react-native-elements/dist/helpers";
-// import firebase from '../../firebase'
+import firebase from "../../firebase";
+import LottieView from "lottie-react-native";
 
-export default function ViewCart() {
+export default function ViewCart({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   // const items = useSelector((state) => state.cartReducer.selectedItems.items);
   const { items, restaurantName } = useSelector(
     (state) => state.cartReducer.selectedItems
@@ -21,9 +23,25 @@ export default function ViewCart() {
     currency: "USD",
   });
 
-  // const addOrderToFirebase = ()=>{
-  //   const db=firebase.firestore()
-  // }
+  const addOrderToFirebase = async () => {
+    setLoading(true);
+    const db = firebase.firestore();
+    db.collection("orders")
+      .add({
+        items: items,
+        restaurantName: restaurantName,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      })
+      .then(() => {
+        setTimeout(() => {
+          setLoading(false);
+          // setModalVisible(false);
+          navigation.navigate("OrderCompleted");
+        }, 1500);
+      });
+    // setModalVisible(false)
+    // navigation.navigate("OrderCompleted")
+  };
   const styles = StyleSheet.create({
     modalContainer: {
       justifyContent: "flex-end", //thats why the modla showed at the bottom
@@ -71,7 +89,9 @@ export default function ViewCart() {
               <Text>{totalUSD}</Text>
             </View>
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
-              <TouchableOpacity onPress={() => setModalVisible(false)}
+              <TouchableOpacity
+                onPress={() => {addOrderToFirebase();
+                  setModalVisible(false);}}
                 style={{
                   marginTop: 20,
                   backgroundColor: "black",
@@ -83,7 +103,17 @@ export default function ViewCart() {
                 }}
               >
                 <Text style={{ color: "white", fontSize: 20 }}>Checkout</Text>
-                <Text style={{position: "absolute", right: 20 , color: "white", fontSize: 20, top: 14 }}>${total ? totalUSD : "--"}</Text>
+                <Text
+                  style={{
+                    position: "absolute",
+                    right: 20,
+                    color: "white",
+                    fontSize: 20,
+                    top: 14,
+                  }}
+                >
+                  ${total ? totalUSD : "--"}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -139,6 +169,7 @@ export default function ViewCart() {
         onRequestClose={() => setModalVisible(false)}
       >
         {checkoutModalContent()}
+        
       </Modal>
 
       {total ? (
@@ -184,6 +215,28 @@ export default function ViewCart() {
               </Text>
             </TouchableOpacity>
           </View>
+        </View>
+      ) : (
+        <></>
+      )}
+      {loading ? (
+        <View
+          style={{
+            backgroundColor: "black",
+            opacity: 0.6,
+            position: "absolute",
+            justifyContent: "center",
+            alignItems: "center",
+            // flex: 1,
+            height: "100%",
+            width: "100%",
+
+          }}
+        >
+          <LottieView style={{height: 200}}
+          source={require('../../assets/animations/scanner.json')} 
+          autoPlay
+          speed={3}/>
         </View>
       ) : (
         <></>

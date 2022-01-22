@@ -1,4 +1,6 @@
 import firebase from "firebase"
+// import  from "@react-native-async-storage/async-storage";
+
 
 
 const firebaseConfig = {
